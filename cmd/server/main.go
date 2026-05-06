@@ -37,6 +37,18 @@ func main() {
 		pubsub.SimpleQueueDurable,
 	)
 
+	err = pubsub.SubscribeGob(
+		rabbitConn,
+		routing.ExchangePerilTopic,
+		routing.GameLogSlug,
+		routing.GameLogSlug+".*",
+		pubsub.SimpleQueueDurable,
+		handlerLogs(),
+	)
+	if err != nil {
+		log.Fatalf("unable to subscribe to gob")
+	}
+
 	gamelogic.PrintServerHelp()
 	for {
 		words := gamelogic.GetInput()
